@@ -11,14 +11,12 @@ if (isset($_POST['search'])) {
   setcookie('search', $_POST['search'], time()+3600);
 } else {
   if (empty($_GET['page_num'])) {
+    unset($_COOKIE['search']);
     setcookie('search', '', time()-1);
   }
 }
 
 include "header.php";
-
-
-
 
  ?>
 
@@ -34,16 +32,13 @@ include "header.php";
 
               <?php
 
-
-
               if (!empty($_GET['page_num'])) {
                 $page_num = $_GET['page_num'];
               } else {
                 $page_num = 1;
               }
 //pagination
-
-              $recordsperpage = 2;
+              $recordsperpage = 5;
 
               if (empty($_POST['search']) && empty($_COOKIE['search'])) {
 

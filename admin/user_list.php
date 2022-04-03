@@ -6,22 +6,60 @@
     header("Location: login.php");
   }
 
+  if (isset($_POST['search'])) {
+    setcookie('search', $_POST['search'], time()+3600);
+  } else {
+    if (empty($_GET['page_num'])) {
+      unset($_COOKIE['search']);
+      setcookie('search', '', time()-1);
+    }
+  }
+
   include "header.php";
 
-  if (empty($_POST['search'])) {
+  if (!empty($_GET['page_num'])) {
+    $page_num = $_GET['page_num'];
+  } else {
+    $page_num = 1;
+  }
 
-    $stmt = $pdo->prepare("SELECT * FROM users");
+  $recordsperpage = 5;
+
+
+  if (empty($_POST['search']) && empty($_COOKIE['search'])) {
+
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users");
     $stmt->execute();
+    $total_records = $stmt->fetchColumn();
+
+    $total_pages = ceil($total_records/$recordsperpage);
+    $offsetnum = ($page_num-1)*$recordsperpage;
+//
+    $stmt = $pdo->prepare("SELECT * FROM users ORDER BY id DESC LIMIT :offsetnum, :recordsperpage");
+
+    $stmt->bindValue(':offsetnum', $offsetnum, PDO::PARAM_INT);
+    $stmt->bindValue(':recordsperpage', $recordsperpage, PDO::PARAM_INT);
+    $stmt->execute();
+
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   } else {
 //for search box
-    $search = $_POST['search'];
+    $search = $_POST['search'] ?? $_COOKIE['search'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE CONCAT('%', :name, '%') OR email LIKE CONCAT('%', :email, '%')");
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE name LIKE CONCAT('%', :name, '%') OR email LIKE CONCAT('%', :email, '%')");
+    $stmt->execute(array(':name'=>$search,':email'=>$search));
+    $total_records = $stmt->fetchColumn();
+
+    $total_pages = ceil($total_records/$recordsperpage);
+    $offsetnum = ($page_num-1)*$recordsperpage;
+
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE name LIKE CONCAT('%', :name, '%') OR email LIKE CONCAT('%', :email, '%') ORDER BY id DESC LIMIT :offsetnum, :recordsperpage");
 
     $stmt->bindValue(':name', $search, PDO::PARAM_STR);
     $stmt->bindValue(':email', $search, PDO::PARAM_STR);
+    $stmt->bindValue(':offsetnum', $offsetnum, PDO::PARAM_INT);
+    $stmt->bindValue(':recordsperpage', $recordsperpage, PDO::PARAM_INT);
     $stmt->execute();
 
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -84,9 +122,22 @@
 
                   </tbody>
                 </table>
+
               </div>
               <!-- card-body ends -->
-
+              <nav aria-lable="Page naviagtion example">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item  <?php if($page_num == 1) {echo "disabled";} ?>"><a class="page-link" href="?page_num=1"><<</a></li>
+                  <li class="page-item <?php if($page_num <= 1) {echo "disabled";} ?>">
+                    <a class="page-link" href="<?php if ($page_num <= 1) {echo "#";} else {echo "?page_num=".($page_num-1);} ?>">Previous</a>
+                  </li>
+                  <li class="page-item active"><a class="page-link" href="#"><?= $page_num ?></a></li>
+                  <li class="page-item <?php if($page_num >= $total_pages) echo "disabled"; ?>">
+                    <a class="page-link" href="<?php if ($page_num >= $total_pages) {echo "#";} else {echo "?page_num=".($page_num+1);} ?>">Next</a>
+                  </li>
+                  <li class="page-item  <?php if($page_num == $total_pages) {echo "disabled";} ?>"><a class="page-link" href="?page_num=<?= $total_pages ?>">>></a></li>
+                </ul>
+              </nav>
             </div>
 
           </div>
