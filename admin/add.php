@@ -9,24 +9,39 @@ if (empty($_SESSION['user_id']) || empty($_SESSION['logged_in']) || empty($_SESS
 include "header.php";
 
 if ($_POST) {
-  $file = $_FILES['image']['name'];
-  $imagetype = pathinfo($file,PATHINFO_EXTENSION);
 
-  if ($imagetype !== 'jpg' && $imagetype !== 'png' && $imagetype !== 'jpeg') {
-    echo "<script>alert('The image type must be jpg or png or jpeg');</script>";
+  if (empty($_POST['title']) || empty($_POST['content']) || !empty($_FILES['image']['error'])) {
+
+    if (empty($_POST['title'])) {
+      $titleError = "*Title can't be empty!";
+    }
+    if (empty($_POST['content'])) {
+      $contentError = "*Content can't be empty!";
+    }
+    if (!empty($_FILES['image']['error'])) {
+      $imageError = "*Image can't be empty!";
+    }
+
   } else {
-    move_uploaded_file($_FILES['image']['tmp_name'],'../images/'.$file);
-    $stmt = $pdo->prepare("INSERT INTO posts(title, content, image, author_id) VALUES(:title, :content, :image, :author_id)");
-    $result = $stmt->execute(
-      array(
-        ":title"=>$_POST['title'],
-        ":content"=>$_POST['content'],
-        ":image"=>$_FILES['image']['name'],
-        ":author_id"=>$_SESSION['user_id']
-      )
-    );
-    if ($result) {
-      echo "<script>alert('The new data is successfully added.');window.location.href = 'index.php';</script>";
+    $file = $_FILES['image']['name'];
+    $imagetype = pathinfo($file,PATHINFO_EXTENSION);
+
+    if ($imagetype !== 'jpg' && $imagetype !== 'png' && $imagetype !== 'jpeg') {
+      echo "<script>alert('The image type must be jpg or png or jpeg');</script>";
+    } else {
+      move_uploaded_file($_FILES['image']['tmp_name'],'../images/'.$file);
+      $stmt = $pdo->prepare("INSERT INTO posts(title, content, image, author_id) VALUES(:title, :content, :image, :author_id)");
+      $result = $stmt->execute(
+        array(
+          ":title"=>$_POST['title'],
+          ":content"=>$_POST['content'],
+          ":image"=>$_FILES['image']['name'],
+          ":author_id"=>$_SESSION['user_id']
+        )
+      );
+      if ($result) {
+        echo "<script>alert('The new data is successfully added.');window.location.href = 'index.php';</script>";
+      }
     }
   }
 }
@@ -44,15 +59,18 @@ if ($_POST) {
                 <form class="form" action="" method="post" enctype="multipart/form-data">
                   <div class="form-group">
                     <label for="title">Title</label>
-                    <input type="text" name="title" class="form-control" value="" required>
+                    <br><span style="font-size:13px; color:red;"><?= $titleError ?? "" ?></span>
+                    <input type="text" name="title" class="form-control" value="" >
                   </div>
                   <div class="form-group">
                     <label for="content">Content</label>
-                    <textarea name="content" rows="8" cols="80" class="form-control" required></textarea>
+                    <br><span style="font-size:13px; color:red;"><?= $contentError ?? "" ?></span>
+                    <textarea name="content" rows="8" cols="80" class="form-control" ></textarea>
                   </div>
                   <div class="form-group">
                     <label for="image">Image</label><br>
-                    <input type="file" name="image" value="" required>
+                    <br><span style="font-size:13px; color:red;"><?= $imageError ?? "" ?></span><br>
+                    <input type="file" name="image" value="" >
                   </div>
                   <div class="form-group">
                     <input type="submit" class="btn btn-success" name="" value="Submit">
