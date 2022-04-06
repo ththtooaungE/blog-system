@@ -31,18 +31,14 @@ if ($_POST) {
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     if (!$result) {
-      if ($_POST['role'] == "admin") {
-        $role = 1;
-      } else {
-        $role = 0;
-      }
+
       if ($_POST['password']) {
         $stmt = $pdo->prepare("UPDATE users SET name = :name, email = :email, password = :password, role = :role WHERE id =".$_GET['id']);
-        $result = $stmt->execute(array(':name' => $_POST['name'],':email' => $_POST['email'],':password' => $_POST['password'],':role' => $role,));
+        $result = $stmt->execute(array(':name' => $_POST['name'],':email' => $_POST['email'],':password' => password_hash($_POST['password'],PASSWORD_DEFAULT),':role' => $_POST['role'],));
 
       } else {
         $stmt = $pdo->prepare("UPDATE users SET name = :name, email = :email, role = :role WHERE id =".$_GET['id']);
-        $result = $stmt->execute(array(':name' => $_POST['name'],':email' => $_POST['email'],':role' => $role,));
+        $result = $stmt->execute(array(':name' => $_POST['name'],':email' => $_POST['email'],':role' => $_POST['role'],));
       }
       if ($result) {
         echo "<script>alert('The record is successfully updated.');</script>";

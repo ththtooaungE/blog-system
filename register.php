@@ -27,7 +27,7 @@ if ($_POST) {
 
     if(empty($user)) {
       $stmt = $pdo->prepare("INSERT INTO users(name, email, password) VALUES(:name, :email, :password)");
-      $result = $stmt ->execute(array(':name'=>$_POST['name'],':email'=>$_POST['email'],':password'=>$_POST['password']));
+      $result = $stmt ->execute(array(':name'=>$_POST['name'],':email'=>$_POST['email'],':password'=>password_hash($_POST['password'],PASSWORD_DEFAULT)));
 
       if ($result) {
         echo "<script>alert('Your account is created. Please login.');window.location.href = 'login.php';</script>";

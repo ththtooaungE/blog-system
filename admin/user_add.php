@@ -40,7 +40,7 @@ if ($_POST) {
         $stmt = $pdo->prepare("INSERT INTO users(name, email, password, role) VALUES(:name, :email, :password, :role)");
         $stmt->bindValue(':name',$_POST['name']);
         $stmt->bindValue(':email',$_POST['email']);
-        $stmt->bindValue(':password',$_POST['password']);
+        $stmt->bindValue(':password',password_hash($_POST['password'],PASSWORD_DEFAULT));
         $stmt->bindValue(':role',$_POST['role'], PDO::PARAM_INT);
         $result = $stmt->execute();
 
