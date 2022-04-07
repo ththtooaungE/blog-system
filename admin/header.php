@@ -40,6 +40,7 @@
           </a>
           <div class="navbar-search-block">
             <form class="form-inline" action="" method="post">
+              <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
               <div class="input-group input-group-sm">
                 <input class="form-control form-control-navbar" name="search" value="<?= $_POST['search'] ?? "" ?>" type="search" placeholder="Search" aria-label="Search">
                 <div class="input-group-append">
