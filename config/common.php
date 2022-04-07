@@ -22,3 +22,8 @@
       $_SESSION['_token'] = bin2hex(openssl_random_pseudo_bytes(32));
     }
   }
+
+  //escape html for output
+  function escape($html) {
+    return htmlspecialchars($html, ENT_QUOTES | ENT_SUBSTITUTE, "UTF-8");
+  }

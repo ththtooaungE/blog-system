@@ -1,6 +1,7 @@
 <?php
   session_start();
   require "config/config.php";
+  require "config/common.php";
 
   if (empty($_SESSION['user_id']) || empty($_SESSION['logged_in'])) {
     header("Location: login.php");
@@ -51,12 +52,12 @@
                 <div class="card card-widget m-3">
                   <div class="card-header">
                     <div class="card-title" style="float:none">
-                      <h4 style="text-align:center"><?= $blog['title'] ?></h4>
+                      <h4 style="text-align:center"><?= escape($blog['title']) ?></h4>
                     </div>
                   </div>
                   <div class="card-body">
                     <a href="blogdetail.php?id=<?= $blog['id'] ?>&page_num=<?= $page_num ?>"><img style="width: 100%; height: 300px;object-fit: cover"
-                      src="images/<?= $blog['image'] ?>" alt="<?= $result[0]['title'] ?>"></a>
+                      src="images/<?= escape($blog['image']) ?>" alt="<?= escape($result[0]['title']) ?>"></a>
                   </div>
                 </div>
               </div>

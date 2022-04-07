@@ -8,8 +8,6 @@
     exit();
   }
 
-  // print_r($_SESSION);
-
   if ($_POST) {
     //backend validation
     if (empty($_POST['comment'])) {
@@ -50,21 +48,19 @@
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
      ?>
     <section class="content">
-      <!-- Box Comment -->
-
       <div class="card card-widget">
         <section class="content-header">
-            <h1 class="p-3 text-center"><?= $result[0]['title'] ?></h1>
+            <h1 class="p-3 text-center"><?= escape($result[0]['title']) ?></h1>
         </section>
       </div>
       <div class="card-body">
-        <img class="" width="100%" src="images/<?= $result[0]['image'] ?>" alt="<?= $result[0]['image'] ?>">
-        <p><?= $result[0]['content'] ?></p>
+        <img class="" width="100%" src="images/<?= escape($result[0]['image']) ?>" alt="<?= escape($result[0]['image']) ?>">
+        <p><?= escape($result[0]['content']) ?></p>
         <h3>Comments</h3><hr>
       </div>
-      <!-- /.card-body -->
 
       <?php
+      //showing comments
       $stmt = $pdo->prepare("SELECT * FROM comments WHERE post_id =".$_GET['id']);
       $stmt->execute();
       $comments = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -80,9 +76,9 @@
             ?>
             <div class="card-comment">
               <div class="comment-text ml-0">
-                <span class="username"><?= $user_name[0]['name'] ?><span class="text-muted float-right"><?=  date("h:i:s d/M/Y", strtotime($comment['created_at'])) ?></span>
+                <span class="username"><?= escape($user_name[0]['name']) ?><span class="text-muted float-right"><?=  date("h:i:s d/M/Y", strtotime($comment['created_at'])) ?></span>
                 </span><!-- /.username -->
-                <?= $comment['content'] ?>
+                <?= escape($comment['content']) ?>
               </div>
             </div>
             <?php
@@ -95,9 +91,6 @@
       <div class="card-footer">
         <form action="" method="post">
           <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
-          <!-- <img class="img-fluid img-circle img-sm" src="dist/img/user4-128x128.jpg" alt="Alt Text"> -->
-          <!-- .img-push is used to add margin to elements next to floating images -->
-          <!-- <input type="submit" class="btn btn-primary mb-3" name="" value="Done"> -->
           <span style="font-size:13px; color:red;"><?= $commentError ?? "" ?></span>
           <div class="img-push">
             <input type="text" name="comment" class="form-control form-control-sm" placeholder="Press enter to post comment">

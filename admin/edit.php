@@ -81,12 +81,12 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <div class="form-group">
                     <label for="title">Title</label>
                     <br><span style="font-size:13px; color:red;"><?= $titleError ?? "" ?></span>
-                    <input type="text" name="title" class="form-control" value="<?= $result[0]['title'] ?>">
+                    <input type="text" name="title" class="form-control" value="<?= escape($result[0]['title']) ?>">
                   </div>
                   <div class="form-group">
                     <label for="content">Content</label>
                     <br><span style="font-size:13px; color:red;"><?= $contentError ?? "" ?></span>
-                    <textarea name="content" rows="8" cols="80" class="form-control"><?= $result[0]['content'] ?></textarea>
+                    <textarea name="content" rows="8" cols="80" class="form-control"><?= escape($result[0]['content']) ?></textarea>
                   </div>
                   <div class="form-group">
                     <label for="image">Image</label><br>

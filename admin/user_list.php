@@ -1,6 +1,7 @@
 <?php
   session_start();
   require "../config/config.php";
+  require "../config/common.php";
 
   if (empty($_SESSION['user_id']) || empty($_SESSION['logged_in']) || empty($_SESSION['role'])) {
     header("Location: login.php");
@@ -105,8 +106,8 @@
                         ?>
                         <tr>
                           <td><?= $i.'.' ?></td>
-                          <td><?= $user['name'] ?></td>
-                          <td><?= $user['email'] ?></td>
+                          <td><?= escape($user['name']) ?></td>
+                          <td><?= escape($user['email']) ?></td>
                           <td><?php echo (int)$user['role'] ? "admin" : "user" ?></td>
                           <td>
                             <a href="user_edit.php?id=<?= $user['id'] ?>" type="button" class="btn btn-warning">Edit</a>

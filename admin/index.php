@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "../config/config.php";
+require "../config/common.php";
 
 if (empty($_SESSION['user_id']) || empty($_SESSION['logged_in']) || empty($_SESSION['role'])) {
   header("Location: login.php");
@@ -101,8 +102,8 @@ include "header.php";
                         ?>
                         <tr>
                           <td><?= $i.'.' ?></td>
-                          <td><?= $blog['title'] ?></td>
-                          <td><?= substr($blog['content'],0,50) ?><span class="text-muted"> ... continue reading</span></td>
+                          <td><?= escape($blog['title']) ?></td>
+                          <td><?= escape(substr($blog['content'],0,50)) ?><span class="text-muted"> ... continue reading</span></td>
                           <td>
                             <a href="edit.php?id=<?= $blog['id'] ?>" type="button" class="btn btn-warning">Edit</a>
                             <a href="delete.php?id=<?= $blog['id'] ?>" type="button"

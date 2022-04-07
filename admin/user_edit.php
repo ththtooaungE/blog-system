@@ -74,12 +74,12 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
                   <div class="form-group">
                     <label for="name">Name</label>
                     <span style="font-size:13px; color:red;"><?= $nameError ?? "" ?></span>
-                    <input type="text" name="name" class="form-control" value="<?= $result[0]['name'] ?> " required>
+                    <input type="text" name="name" class="form-control" value="<?= escape($result[0]['name']) ?> " required>
                   </div>
                   <div class="form-group">
                     <label for="email">Email</label>
                     <span style="font-size:13px; color:red;"><?= $emailError ?? "" ?></span>
-                    <input type="text" name="email" class="form-control" value="<?= $result[0]['email'] ?>" required>
+                    <input type="text" name="email" class="form-control" value="<?= escape($result[0]['email']) ?>" required>
                   </div>
                   <div class="form-group">
                     <label for="email">Password</label>
