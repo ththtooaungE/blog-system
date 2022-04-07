@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "config/config.php";
+require "config/common.php";
 
 if ($_POST) {
   if (empty($_POST['name']) || empty($_POST['email']) || empty($_POST['password']) || strlen($_POST['password']) < 5) {
@@ -66,9 +67,10 @@ if ($_POST) {
        <p class="login-box-msg">Register to create a new account</p>
 
        <form action="" method="post">
+         <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
          <span style="font-size:13px; color:red;"><?= $nameError ?? "" ?></span>
          <div class="input-group mb-3">
-           <input type="text" name="name" class="form-control" placeholder="Name" >
+           <input type="text" name="name" class="form-control" placeholder="Name" required>
            <div class="input-group-append">
              <div class="input-group-text">
                <span class="fas fa-user"></span>
@@ -77,7 +79,7 @@ if ($_POST) {
          </div>
          <span style="font-size:13px; color:red;"><?= $emailError ?? "" ?></span>
          <div class="input-group mb-3">
-           <input type="email" name="email" class="form-control" placeholder="Email" >
+           <input type="email" name="email" class="form-control" placeholder="Email" required>
            <div class="input-group-append">
              <div class="input-group-text">
                <span class="fas fa-envelope"></span>
@@ -86,7 +88,7 @@ if ($_POST) {
          </div>
          <span style="font-size:13px; color:red;"><?= $passwordError ?? "" ?></span>
          <div class="input-group mb-3">
-           <input type="password" name="password" class="form-control" placeholder="Password" >
+           <input type="password" name="password" class="form-control" placeholder="Password" required>
            <div class="input-group-append">
              <div class="input-group-text">
                <span class="fas fa-lock"></span>

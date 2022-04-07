@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "../config/config.php";
+require "../config/common.php";
 
 if (empty($_SESSION['user_id']) || empty($_SESSION['logged_in']) || empty($_SESSION['role'])) {
   header("Location: login.php");
@@ -64,6 +65,7 @@ if ($_POST) {
                  <p class="login-box-msg">Create a new account</p>
 
                  <form action="" method="post">
+                   <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
                    <span style="font-size:13px; color:red;"><?= $nameError ?? "" ?></span>
                    <div class="input-group mb-3">
                      <input type="text" name="name" class="form-control" placeholder="Name" required>

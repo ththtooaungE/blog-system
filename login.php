@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "config/config.php";
+require "config/common.php";
 
 if ($_POST) {
   // Backend validation
@@ -61,9 +62,10 @@ if ($_POST) {
        <p class="login-box-msg">Sign in to start your session</p>
 
        <form action="" method="post">
+         <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
          <span style="font-size:13px; color:red;"><?= $emailError ?? "" ?></span>
          <div class="input-group mb-3">
-           <input type="email" name="email" class="form-control" placeholder="Email" >
+           <input type="email" name="email" class="form-control" placeholder="Email" required>
            <div class="input-group-append">
              <div class="input-group-text">
                <span class="fas fa-envelope"></span>
@@ -72,7 +74,7 @@ if ($_POST) {
          </div>
          <span style="font-size:13px; color:red;"><?= $passwordError ?? "" ?></span>
          <div class="input-group mb-3">
-           <input type="password" name="password" class="form-control" placeholder="Password" >
+           <input type="password" name="password" class="form-control" placeholder="Password" required>
            <div class="input-group-append">
              <div class="input-group-text">
                <span class="fas fa-lock"></span>

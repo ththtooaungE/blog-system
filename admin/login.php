@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "../config/config.php";
+require "../config/common.php";
 
 if ($_POST) {
   $stmt = $pdo->prepare("SELECT * FROM users WHERE email=:email");
@@ -50,6 +51,7 @@ if ($_POST) {
        <p class="login-box-msg">Sign in to start your session</p>
 
        <form action="" method="post">
+         <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
          <div class="input-group mb-3">
            <input type="email" name="email" class="form-control" placeholder="Email" required>
            <div class="input-group-append">

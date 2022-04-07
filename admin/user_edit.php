@@ -1,6 +1,7 @@
 <?php
 session_start();
 require "../config/config.php";
+require "../config/common.php";
 
 if (empty($_SESSION['user_id']) || empty($_SESSION['logged_in']) || empty($_SESSION['role'])) {
   header("Location: login.php");
@@ -69,6 +70,7 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="card">
               <div class="card-body">
                 <form class="form" action="" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="_token" value="<?php echo $_SESSION['_token'] ?>">
                   <div class="form-group">
                     <label for="name">Name</label>
                     <span style="font-size:13px; color:red;"><?= $nameError ?? "" ?></span>
